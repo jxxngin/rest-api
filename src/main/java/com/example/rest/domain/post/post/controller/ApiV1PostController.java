@@ -66,16 +66,18 @@ public class ApiV1PostController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity modify(
+    public RsData<Void> modify(
             @PathVariable long id,
             @RequestBody @Valid ModifyReqBody body
     ) {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.content());
 
-        return ResponseEntity
-                .noContent()
-                .build();
+        return new RsData<>(
+                "200-1",
+                "%d번 글 수정이 완료되었습니다.".formatted(id),
+                null
+        );
     }
 
     record WriteReqBody(
