@@ -47,11 +47,11 @@ public class ApiV1PostController {
     }
 
     @DeleteMapping("/{id}")
-    public RsData delete(@PathVariable long id) {
+    public RsData<Void> delete(@PathVariable long id) {
         Post post = postService.getItem(id).get();
         postService.delete(post);
 
-        return new RsData(
+        return new RsData<> (
                 "200-1",
                 "%d번 글 삭제가 완료되었습니다.".formatted(id)
         );
@@ -63,16 +63,17 @@ public class ApiV1PostController {
     ) {}
 
     @PutMapping("{id}")
-    public RsData modify(
+    public RsData<Void> modify(
             @PathVariable long id,
             @RequestBody @Valid ModifyReqBody body
     ) {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.content());
 
-        return new RsData(
+        return new RsData<> (
                 "200-1",
-                "%d번 글 수정이 완료되었습니다.".formatted(id)
+                "%d번 글 수정이 완료되었습니다.".formatted(id),
+                null
         );
     }
 
