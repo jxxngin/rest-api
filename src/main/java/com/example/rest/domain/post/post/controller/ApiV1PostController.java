@@ -28,7 +28,7 @@ public class ApiV1PostController {
                 .map(PostDto::new)
                 .toList();
 
-        return new RsData<> (
+        return new RsData<>(
                 "200-1",
                 "글 목록 조회가 완료되었습니다.",
                 postDtos
@@ -39,7 +39,7 @@ public class ApiV1PostController {
     public RsData<PostDto> getItem(@PathVariable long id) {
         Post post = postService.getItem(id).get();
 
-        return new RsData<> (
+        return new RsData<>(
                 "200-1",
                 "글 조회가 완료되었습니다.",
                 new PostDto(post)
@@ -51,7 +51,7 @@ public class ApiV1PostController {
         Post post = postService.getItem(id).get();
         postService.delete(post);
 
-        return new RsData<> (
+        return new RsData<>(
                 "200-1",
                 "%d번 글 삭제가 완료되었습니다.".formatted(id)
         );
@@ -60,7 +60,8 @@ public class ApiV1PostController {
     record ModifyReqBody(
             @NotBlank @Length(min = 3) String title,
             @NotBlank @Length(min = 3) String content
-    ) {}
+    ) {
+    }
 
     @PutMapping("{id}")
     public RsData<Void> modify(
@@ -70,7 +71,7 @@ public class ApiV1PostController {
         Post post = postService.getItem(id).get();
         postService.modify(post, body.title(), body.content());
 
-        return new RsData<> (
+        return new RsData<>(
                 "200-1",
                 "%d번 글 수정이 완료되었습니다.".formatted(id),
                 null
@@ -80,16 +81,22 @@ public class ApiV1PostController {
     record WriteReqBody(
             @NotBlank @Length(min = 3) String title,
             @NotBlank @Length(min = 3) String content
-    ) {}
+    ) {
+    }
+
+    record WriteResBody(long id, long totalCount) {}
 
     @PostMapping
-    public RsData write(@RequestBody @Valid WriteReqBody body) {
+    public RsData<WriteResBody> write(@RequestBody @Valid WriteReqBody body) {
         Post post = postService.write(body.title(), body.content());
 
-        return new RsData<Long> (
+        return new RsData<>(
                 "200-1",
                 "글 작성이 완료되었습니다.",
-                post.getId()
+                new WriteResBody(
+                        post.getId(),
+                        postService.count()
+                )
         );
     }
 
