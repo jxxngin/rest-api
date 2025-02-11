@@ -38,17 +38,12 @@ public class ApiV1PostController {
         );
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class ModifyForm {
-        private String title;
-        private String content;
-    }
+    record ModifyReqBody(String title, String content) {}
 
     @PutMapping("{id}")
-    public RsData modify(@PathVariable long id, @RequestBody ModifyForm form) {
+    public RsData modify(@PathVariable long id, @RequestBody ModifyReqBody body) {
         Post post = postService.getItem(id).get();
-        postService.modify(post, form.getTitle(), form.getContent());
+        postService.modify(post, body.title(), body.content());
 
         return new RsData(
                 "200-1",
@@ -56,16 +51,11 @@ public class ApiV1PostController {
         );
     }
 
-    @AllArgsConstructor
-    @Getter
-    public static class WriteForm {
-        private String title;
-        private String content;
-    }
+    record WriteReqBody(String title, String content) {}
 
     @PostMapping
-    public RsData write(@RequestBody WriteForm form) {
-        postService.write(form.getTitle(), form.getContent());
+    public RsData write(@RequestBody WriteReqBody body) {
+        postService.write(body.title(), body.content());
 
         return new RsData(
                 "200-1",
