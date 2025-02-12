@@ -1,5 +1,6 @@
 package com.example.rest.global.expection;
 
+import com.example.rest.global.app.AppConfig;
 import com.example.rest.global.dto.RsData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<RsData<Void>> handle(NoSuchElementException e) {
-        e.printStackTrace();
+
+        if (AppConfig.isNotProd()) {
+            e.printStackTrace();
+        }
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -25,10 +29,12 @@ public class GlobalExceptionHandler {
                                 "해당 데이터가 존재하지 않습니다."
                         )
                 );
+
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RsData<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
         String message = e.getBindingResult().getFieldErrors()
                 .stream()
                 .map(fe -> fe.getField() + " : " + fe.getCode() + " : " + fe.getDefaultMessage())
@@ -42,7 +48,7 @@ public class GlobalExceptionHandler {
                                 "400-1",
                                 message
                         )
-                )
+                );
 
     }
 
