@@ -3,6 +3,7 @@ package com.example.rest.global.expection;
 import com.example.rest.global.dto.RsData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,7 +14,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<RsData<Void>> handle() {
-
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(
@@ -23,4 +23,10 @@ public class GlobalExceptionHandler {
                         )
                 );
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleMethodArgumentNotValidException() {
+        return "MethodArgmentNotValidException";
+    }
+
 }
