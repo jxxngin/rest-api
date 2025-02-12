@@ -32,7 +32,7 @@ public class ApiV1MemberController {
 
         memberService.findByUsername(body.username())
                 .ifPresent(member -> {
-                    throw new ServiceException("400-1", "중복된 아이디입니다.");I
+                    throw new ServiceException("400-1", "중복된 아이디입니다.");
                 });
 
         Member member = memberService.join(body.username(), body.password(), body.nickname());
