@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<RsData<Void>> IllegalArgumentExceptionHandler(ServiceException e) {
+    public ResponseEntity<RsData<Void>> ServiceExceptionHandle(ServiceException e) {
 
         if (AppConfig.isNotProd()) {
             e.printStackTrace();
